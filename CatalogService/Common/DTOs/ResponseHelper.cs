@@ -31,7 +31,7 @@ public static class ResponseHelper
         return new ApiResponse<object>
         {
             status = false,
-            Code = LogConst.GLOSSARY_SERVICE + LogConst.SERVER_CODE,
+            Code = LogConst.CATALOG_SERVICE + LogConst.SERVER_CODE,
             Message = LogConst.Failure
         };
     }
