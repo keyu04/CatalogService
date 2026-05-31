@@ -1,0 +1,8 @@
+bin/
+obj/
+*.Tests/
+.vs/
+.git/
+*.md
+Dockerfile
+docker-compose.yml
