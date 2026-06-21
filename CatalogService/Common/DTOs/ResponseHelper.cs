@@ -16,7 +16,7 @@ public static class ResponseHelper
         };
     }
 
-    public static ApiResponse<object> Success(string? message, string Code)
+    public static ApiResponse<object> Success(string Code)
     {
         return new ApiResponse<object>
         {
@@ -32,7 +32,7 @@ public static class ResponseHelper
         {
             status = false,
             Code = LogConst.CATALOG_SERVICE + LogConst.SERVER_CODE,
-            Message = LogConst.Failure
+            Message = message ?? LogConst.Failure
         };
     }
 }
