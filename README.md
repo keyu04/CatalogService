@@ -23,7 +23,7 @@ Catalog microservice for managing categories, products, inventory, and product i
 
 ### Run With Docker
 docker-compose up --build
-API available at: http://localhost:5050/swagger
+API available at: http://localhost:5070/swagger
 
 ### Run Without Docker
 Update the connection string in `CatalogService/appsettings.Development.json` then:
