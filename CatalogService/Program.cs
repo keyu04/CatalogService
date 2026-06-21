@@ -16,44 +16,49 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // ── Repositories ──────────────────────────────────────────────────
-builder.Services.AddScoped<ICategoryRepository,  CategoryRepository>();
-builder.Services.AddScoped<IProductRepository,   ProductRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IInventoryRepository, InventoryRepository>();
 
 // ── Services ──────────────────────────────────────────────────────
-builder.Services.AddScoped<ICategoryService,  CategoryService>();
-builder.Services.AddScoped<IProductService,   ProductService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
 
 // ── API Versioning ────────────────────────────────────────────────
 builder.Services.AddApiVersioning(options =>
 {
-    options.DefaultApiVersion                   = new ApiVersion(1, 0);
+    options.DefaultApiVersion = new ApiVersion(1, 0);
     options.AssumeDefaultVersionWhenUnspecified = true;
-    options.ReportApiVersions                   = true;
+    options.ReportApiVersions = true;
 })
-.AddMvc();
+.AddMvc()
+.AddApiExplorer(options =>
+{
+    options.GroupNameFormat = "'v'V";
+    options.SubstituteApiVersionInUrl = true;
+});
 
 // ── Rate Limiting ─────────────────────────────────────────────────
 builder.Services.AddRateLimiter(options =>
 {
     options.AddFixedWindowLimiter("general", config =>
     {
-        config.Window      = TimeSpan.FromMinutes(1);
+        config.Window = TimeSpan.FromMinutes(1);
         config.PermitLimit = 100;
-        config.QueueLimit  = 0;
+        config.QueueLimit = 0;
     });
 
     options.AddFixedWindowLimiter("strict", config =>
     {
-        config.Window      = TimeSpan.FromMinutes(1);
+        config.Window = TimeSpan.FromMinutes(1);
         config.PermitLimit = 20;
-        config.QueueLimit  = 0;
+        config.QueueLimit = 0;
     });
 
     options.OnRejected = async (context, cancellationToken) =>
     {
-        context.HttpContext.Response.StatusCode  = 429;
+        context.HttpContext.Response.StatusCode = 429;
         context.HttpContext.Response.ContentType = "application/json";
 
         await context.HttpContext.Response.WriteAsync("""
