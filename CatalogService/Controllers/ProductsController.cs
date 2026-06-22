@@ -3,6 +3,7 @@ using CatalogService.Common.Constants;
 using CatalogService.Common.Helpers;
 using CatalogService.DTOs.Product;
 using CatalogService.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 
@@ -21,11 +22,11 @@ public class ProductsController : ControllerBase
     [EnableRateLimiting("general")]
     public async Task<IActionResult> GetAll(
         [FromQuery] string? search,
-        [FromQuery] Guid?   categoryId,
-        [FromQuery] bool?   isFeatured,
-        [FromQuery] bool?   inStockOnly,
-        [FromQuery] int     page     = 1,
-        [FromQuery] int     pageSize = 10)
+        [FromQuery] Guid? categoryId,
+        [FromQuery] bool? isFeatured,
+        [FromQuery] bool? inStockOnly,
+        [FromQuery] int page = 1,
+        [FromQuery] int pageSize = 10)
     {
         var result = await _service.GetAllAsync(
             search, categoryId, isFeatured, inStockOnly, page, pageSize);
@@ -44,6 +45,7 @@ public class ProductsController : ControllerBase
         return Ok(ResponseHelper.Success<object>(product, LogConst.PRODUCT_SERVICE + "_200"));
     }
 
+    [Authorize]
     [HttpPost]
     [EnableRateLimiting("strict")]
     public async Task<IActionResult> Create([FromBody] CreateProductDto dto)
@@ -52,6 +54,7 @@ public class ProductsController : ControllerBase
         return StatusCode(201, ResponseHelper.Success<object>(created, LogConst.PRODUCT_SERVICE + "_201"));
     }
 
+    [Authorize]
     [HttpPut("{id:guid}")]
     [EnableRateLimiting("strict")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateProductDto dto)
@@ -63,6 +66,7 @@ public class ProductsController : ControllerBase
         return Ok(ResponseHelper.Success<object>(updated, LogConst.PRODUCT_SERVICE + "_200"));
     }
 
+    [Authorize]
     [HttpDelete("{id:guid}")]
     [EnableRateLimiting("strict")]
     public async Task<IActionResult> Delete(Guid id)
