@@ -3,6 +3,7 @@ using CatalogService.Common.Constants;
 using CatalogService.Common.Helpers;
 using CatalogService.DTOs.Inventory;
 using CatalogService.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 
@@ -28,6 +29,7 @@ public class InventoryController : ControllerBase
         return Ok(ResponseHelper.Success<object>(inventory, LogConst.INVENTORY_SERVICE + "_200"));
     }
 
+    [Authorize]
     [HttpPut("{productId:guid}")]
     [EnableRateLimiting("strict")]
     public async Task<IActionResult> Update(Guid productId, [FromBody] UpdateInventoryDto dto)
@@ -39,6 +41,7 @@ public class InventoryController : ControllerBase
         return Ok(ResponseHelper.Success<object>(updated, LogConst.INVENTORY_SERVICE + "_200"));
     }
 
+    [Authorize]
     [HttpPost("{productId:guid}/reserve")]
     [EnableRateLimiting("strict")]
     public async Task<IActionResult> Reserve(Guid productId, [FromQuery] int quantity)
@@ -53,6 +56,7 @@ public class InventoryController : ControllerBase
         return Ok(ResponseHelper.Success(LogConst.INVENTORY_SERVICE + "_200"));
     }
 
+    [Authorize]
     [HttpPost("{productId:guid}/release")]
     [EnableRateLimiting("strict")]
     public async Task<IActionResult> Release(Guid productId, [FromQuery] int quantity)

@@ -3,6 +3,7 @@ using CatalogService.Common.Constants;
 using CatalogService.Common.Helpers;
 using CatalogService.DTOs.Category;
 using CatalogService.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 
@@ -21,7 +22,7 @@ public class CategoriesController : ControllerBase
     [EnableRateLimiting("general")]
     public async Task<IActionResult> GetAll(
         [FromQuery] string? search,
-        [FromQuery] int page     = 1,
+        [FromQuery] int page = 1,
         [FromQuery] int pageSize = 10)
     {
         var result = await _service.GetAllAsync(search, page, pageSize);
@@ -39,6 +40,7 @@ public class CategoriesController : ControllerBase
         return Ok(ResponseHelper.Success<object>(category, LogConst.CATALOG_SERVICE + "_200"));
     }
 
+    [Authorize]
     [HttpPost]
     [EnableRateLimiting("strict")]
     public async Task<IActionResult> Create([FromBody] CreateCategoryDto dto)
@@ -47,6 +49,7 @@ public class CategoriesController : ControllerBase
         return StatusCode(201, ResponseHelper.Success<object>(created, LogConst.CATALOG_SERVICE + "_201"));
     }
 
+    [Authorize]
     [HttpPut("{id:guid}")]
     [EnableRateLimiting("strict")]
     public async Task<IActionResult> Update(Guid id, [FromBody] UpdateCategoryDto dto)
@@ -58,6 +61,7 @@ public class CategoriesController : ControllerBase
         return Ok(ResponseHelper.Success<object>(updated, LogConst.CATALOG_SERVICE + "_200"));
     }
 
+    [Authorize]
     [HttpDelete("{id:guid}")]
     [EnableRateLimiting("strict")]
     public async Task<IActionResult> Delete(Guid id)
