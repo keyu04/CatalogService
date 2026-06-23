@@ -66,7 +66,7 @@ public class ProductsController : ControllerBase
         return Ok(ResponseHelper.Success<object>(updated, LogConst.PRODUCT_SERVICE + "_200"));
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]
     [HttpDelete("{id:guid}")]
     [EnableRateLimiting("strict")]
     public async Task<IActionResult> Delete(Guid id)
