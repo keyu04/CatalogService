@@ -61,7 +61,7 @@ public class CategoriesController : ControllerBase
         return Ok(ResponseHelper.Success<object>(updated, LogConst.CATALOG_SERVICE + "_200"));
     }
 
-    [Authorize]
+    [Authorize(Roles = "Admin")]  
     [HttpDelete("{id:guid}")]
     [EnableRateLimiting("strict")]
     public async Task<IActionResult> Delete(Guid id)
